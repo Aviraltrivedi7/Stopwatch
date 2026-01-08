@@ -1,0 +1,189 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 230 25% 4%;
+    --foreground: 210 40% 98%;
+
+    --card: 230 25% 7%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 230 25% 7%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 263 90% 65%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 230 20% 12%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 230 20% 10%;
+    --muted-foreground: 215 20% 55%;
+
+    --accent: 263 90% 65%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 158 90% 55%;
+    --success-foreground: 230 25% 4%;
+
+    --warning: 45 93% 47%;
+    --warning-foreground: 230 25% 4%;
+
+    --border: 230 20% 15%;
+    --input: 230 20% 15%;
+    --ring: 263 90% 65%;
+
+    --radius: 1.25rem;
+
+    /* Custom stopwatch tokens */
+    --glow-primary: 263 90% 65%;
+    --glow-success: 158 90% 55%;
+    --glow-destructive: 0 84% 60%;
+    
+    --glass-bg: 230 25% 10% / 0.45;
+    --glass-border: 230 20% 25% / 0.4;
+    
+    --gradient-dark: radial-gradient(circle at 50% 50%, hsl(230 25% 8%), hsl(230 25% 4%));
+    --gradient-card: linear-gradient(135deg, hsl(230 25% 12% / 0.7) 0%, hsl(230 25% 6% / 0.5) 100%);
+    --gradient-ring: conic-gradient(from 0deg, hsl(263 90% 65%), hsl(280 90% 70%), hsl(263 90% 65%));
+
+    --sidebar-background: 230 25% 6%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 263 90% 65%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 230 20% 12%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 230 20% 15%;
+    --sidebar-ring: 263 90% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--gradient-dark);
+    min-height: 100vh;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply relative overflow-hidden rounded-2xl;
+    background: linear-gradient(135deg, hsl(var(--glass-bg)) 0%, hsl(220 20% 8% / 0.4) 100%);
+    border: 1px solid hsl(var(--glass-border));
+    backdrop-filter: blur(20px);
+    box-shadow: 
+      0 8px 32px hsl(0 0% 0% / 0.3),
+      inset 0 1px 0 hsl(220 15% 30% / 0.2);
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, hsl(185 80% 50% / 0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .glow-primary {
+    box-shadow: 
+      0 0 20px hsl(var(--glow-primary) / 0.3),
+      0 0 40px hsl(var(--glow-primary) / 0.2),
+      0 0 60px hsl(var(--glow-primary) / 0.1);
+  }
+
+  .glow-success {
+    box-shadow: 
+      0 0 15px hsl(var(--glow-success) / 0.4),
+      0 0 30px hsl(var(--glow-success) / 0.2);
+  }
+
+  .glow-destructive {
+    box-shadow: 
+      0 0 15px hsl(var(--glow-destructive) / 0.4),
+      0 0 30px hsl(var(--glow-destructive) / 0.2);
+  }
+
+  .stopwatch-button {
+    @apply relative overflow-hidden rounded-full font-semibold transition-all duration-200;
+    @apply disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100;
+  }
+
+  .stopwatch-button:not(:disabled):hover {
+    transform: scale(1.05);
+  }
+
+  .stopwatch-button:not(:disabled):active {
+    transform: scale(0.95);
+  }
+
+  .lap-entry {
+    @apply glass-card p-4 transition-all duration-300;
+  }
+
+  .lap-best {
+    border-color: hsl(var(--success) / 0.5);
+    background: linear-gradient(135deg, hsl(142 76% 45% / 0.1) 0%, hsl(220 20% 8% / 0.4) 100%);
+  }
+
+  .lap-worst {
+    border-color: hsl(var(--destructive) / 0.5);
+    background: linear-gradient(135deg, hsl(0 72% 51% / 0.1) 0%, hsl(220 20% 8% / 0.4) 100%);
+  }
+
+  .progress-ring-bg {
+    stroke: hsl(var(--secondary));
+  }
+
+  .progress-ring-fg {
+    stroke: url(#gradient);
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 8px hsl(var(--primary) / 0.5));
+    transition: stroke-dashoffset 0.1s linear;
+  }
+
+  .time-digit {
+    @apply inline-block tabular-nums;
+    text-shadow: 0 0 30px hsl(var(--primary) / 0.5);
+  }
+
+  .scroll-container {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted)) transparent;
+  }
+
+  .scroll-container::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scroll-container::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 3px;
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 20px currentColor;
+  }
+}
